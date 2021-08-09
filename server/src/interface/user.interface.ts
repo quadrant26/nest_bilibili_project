@@ -6,7 +6,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class User extends Document {
   @Prop()
   @ApiProperty({ description: '手机号', example: '18688924563' })
-  readonly number: string;
+  readonly phone: string;
 
   @Prop()
   @ApiProperty({ description: '密码', example: '132456' })
