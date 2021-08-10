@@ -1,5 +1,7 @@
+import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { Log4jsLogger } from '@nestx-log4js/core';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -14,6 +16,8 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('/api-docs', app, document);
+
+  app.useLogger(app.get(Log4jsLogger));
 
   await app.listen(3000);
   console.log('http://localhost:3000/api-docs');
