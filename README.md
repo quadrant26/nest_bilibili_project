@@ -68,19 +68,86 @@ Nestjs In Bilibili Study
 
 + nest 使用 mongose
 
-```
-  // 安装依赖
-  npm install --save @nestjs/mongoose mongoose
+  * 安装依赖
 
-  // 创建 db 模块
-  nest g mo db
-  // 连接数据库
-  // db/db.module.ts
-  import { Module } from '@nestjs/common';
-  import { MongooseModule } from '@nestjs/mongoose';
+    ```
+      // 安装依赖
+      npm install --save @nestjs/mongoose mongoose
+    ```
 
-  @Module({
-    imports: [MongooseModule.forRoot('mongodb://127.0.0.1:27017/nest_bilibili')],
-  })
-  export class DbModule {}
-```
+  * 连接数据库
+
+    ```
+      // 创建 db 模块
+      nest g mo db
+      // 连接数据库
+      // db/db.module.ts
+      import { Module } from '@nestjs/common';
+      import { MongooseModule } from '@nestjs/mongoose';
+
+      @Module({
+        imports: [MongooseModule.forRoot('mongodb://127.0.0.1:27017/nest_bilibili', {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+          useCreateIndex: true,
+          useFindAndModify: false,
+        })],
+      })
+      export class DbModule {}
+    ```
+
+  * 导入数据库模块
+
+    ```
+      // 在 app.module.ts 使用
+      @Module({
+        imports: [DbModule, UserModule],
+        controllers: [AppController],
+        providers: [AppService],
+      })
+      export class AppModule {}
+    ```
+
+  * 设计表模型 Schema
+
+    ```
+      // user.interface.ts
+      @Schema()
+      export class User extends Document {
+        @Prop()
+        @ApiProperty({ description: '手机号', example: '18688924563' })
+        readonly phone: string;
+
+        @Prop()
+        @ApiProperty({ description: '密码', example: '132456' })
+        readonly password: string;
+      }
+    ```
+
+  * 使用表模型
+
+    ```
+      // db/Schema/user.sachema.ts
+      export const UserSchema = SchemaFactory.createForClass(User);
+
+      // db/db.module.ts
+      import { MongooseModule } from '@nestjs/mongoose';
+      import { UserSchema } from './Schema/user.schema';
+
+      const MONGO_MODELS = MongooseModule.forFeature([
+        {
+          name: 'USER_MODEL',
+          schema: UserSchema,
+          collection: 'user',
+        },
+      ]);
+
+      // 注册 
+      @Global()
+      @Module({
+        imports: [
+          // ...
+          MONGO_MODELS
+        ]
+      })
+    ```
