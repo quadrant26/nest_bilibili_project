@@ -165,7 +165,7 @@ Nestjs In Bilibili Study
   ```
     // app.module.ts
     import { Log4jsModule } from '@nestx-log4js/core';
-    
+
     @Module({
       imports: [
         Log4jsModule.forRoot()
@@ -178,3 +178,93 @@ Nestjs In Bilibili Study
     app.useLogger(app.get(Log4jsLogger));
 
   ```
+### 中间件
+
+  ```
+    // hello.middleware.ts
+    @Injectable()
+    export class HelloMiddleware implements NestMiddleware {
+      use(req: Request, res: Response, next: NextFunction) {
+        // console.log(req.body);
+        next();
+      }
+    }
+
+    // 在 user.module.ts 中使用
+    export class UserModule implements NestModule {
+      configure(consumer: MiddlewareConsumer) {
+        // apply 关联中间件
+        // forRoutes 只关联 user 模块
+        consumer.apply(HelloMiddleware).forRoutes('user');
+      }
+    }
+  ```
+### crypto
+
+  * 安装
+
+    `yarn add crypto`
+
+  * 使用
+
+    ```
+      // hashPassword.middleware.ts
+      import * as crypto from 'crypto'
+
+      // 生成 salt
+      crypto.randomBytes(3).toString('base64')
+
+      // 加密
+      // 第一个参数： 需要加密的字符串
+      // 第二个参数： 盐
+      // 第三个参数： 迭代次数
+      // 第四个参数： 返回的字符串长度
+      // 第四个参数： 加密方式
+      crypto.pbkdf2Sync(userPassword, salt, 10000, 16, 'sha256').toString('base64');
+    ```
+
+### Guard
+
+  * 创建一个 守卫
+
+  ```
+    nest g gu auth
+  ```
+
+  * 使用守卫
+
+    ```
+      // 导入守卫文件
+      // *.modules.ts
+      @Module({
+        providers: [
+          UserService,
+          {
+            provide: APP_GUARD,
+            useClass: AuthGuard,
+          },
+        ],
+        controllers: [UserController],
+      })
+      export class UserModule implements NestModule {}
+
+      
+      // 全局使用
+      // *.controller.ts
+      @UseGuards(AuthGuard)
+      export class UserController {
+        
+        @Get('hello')
+        // 设置元数据
+        @SetMetadata("role", ['admin']) // 设置元数据， 设置接口的权限
+        @Role('admin') // 自定义装饰器
+        hello() {
+          return 'hello world';
+        }
+
+      }
+
+
+      
+    ```
+
