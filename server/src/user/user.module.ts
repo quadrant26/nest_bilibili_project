@@ -9,7 +9,7 @@ import { HashPasswordMiddleware } from '../middleware/hash-password.middleware';
 })
 export class UserModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(HashPasswordMiddleware).forRoutes('user');
+    consumer.apply(HashPasswordMiddleware).forRoutes('user/regist');
     // throw new Error('Method not implemented.');
   }
 }
