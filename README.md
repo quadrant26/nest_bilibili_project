@@ -151,3 +151,30 @@ Nestjs In Bilibili Study
         ]
       })
     ```
+
+### log4js 日志文件
+
+
+  * 安装
+
+    ```
+      yarn add @nestx-log4js/core
+    ```
+
+  * 使用
+  ```
+    // app.module.ts
+    import { Log4jsModule } from '@nestx-log4js/core';
+    
+    @Module({
+      imports: [
+        Log4jsModule.forRoot()
+      ]
+    })
+    export class AppModule {}
+
+    // main.ts
+    import { Log4jsLogger } from '@nestx-log4js/core';
+    app.useLogger(app.get(Log4jsLogger));
+
+  ```
