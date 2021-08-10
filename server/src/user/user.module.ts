@@ -1,7 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
-import { HelloMiddleware } from '../middleware/hello.middleware';
+import { HashPasswordMiddleware } from '../middleware/hash-password.middleware';
 
 @Module({
   providers: [UserService],
@@ -9,9 +9,7 @@ import { HelloMiddleware } from '../middleware/hello.middleware';
 })
 export class UserModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    // apply 关联中间件
-    // forRoutes 只关联 user 模块
-    consumer.apply(HelloMiddleware).forRoutes('user');
+    consumer.apply(HashPasswordMiddleware).forRoutes('user');
     // throw new Error('Method not implemented.');
   }
 }
