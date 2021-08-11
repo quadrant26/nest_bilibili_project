@@ -125,6 +125,19 @@ export class AuthService {
       });
   }
 
+  // 用户修改方法
+  async alter(user: User) {
+    return await this.userService.findOneByPhone(user.phone).then(async () => {
+      return await this.userModel
+        .findOneAndUpdate({ phone: user.phone }, user, {}, () => {
+          logger.log(`用户${user.phone}修改密码成功`);
+        })
+        .then(() => {
+          return (this.response = { code: 0, msg: '用户修改成功' });
+        });
+    });
+  }
+
   // 创建 token
   private async createToToken(user: User) {
     return await this.jwtService.sign(user);

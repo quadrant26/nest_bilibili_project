@@ -19,4 +19,10 @@ export class AuthController {
   async registUser(@Body() userDto: User) {
     return await this.authService.register(userDto);
   }
+
+  @Post('alter')
+  @ApiOperation({ summary: '修改密码' })
+  async alterUser(@Body() userDto: User) {
+    return await this.authService.alter(userDto);
+  }
 }
