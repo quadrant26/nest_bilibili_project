@@ -13,4 +13,10 @@ export class AuthController {
   async userLogin(@Body() userDto: User) {
     return await this.authService.login(userDto);
   }
+
+  @Post('regist')
+  @ApiOperation({ summary: '用户注册' })
+  async registUser(@Body() userDto: User) {
+    return await this.authService.register(userDto);
+  }
 }
