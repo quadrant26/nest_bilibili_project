@@ -43,7 +43,9 @@ export class AuthService {
         if (pass === dbUser.password) {
           return (this.response = {
             code: 0,
-            msg: '登录成功',
+            msg: {
+              userId: dbUser._id,
+            },
           });
         } else {
           this.response = {
@@ -60,25 +62,25 @@ export class AuthService {
 
   public async login(user: User) {
     // return await this.validateUser(user);
-    return await this.validateUser(user).then(() => {
-      return this.createToToken(user);
-    });
+    // return await this.validateUser(user).then(() => {
+    //   return this.createToToken(user);
+    // });
 
-    // return await this.validateUser(user)
-    //   .then(async (res: IResponse) => {
-    //     if (res.code === 0) {
-    //       this.response = res;
-    //       throw this.response;
-    //     }
+    return await this.validateUser(user)
+      .then(async (res: IResponse) => {
+        if (res.code !== 0) {
+          this.response = res;
+          throw this.response;
+        }
 
-    //     const userId = res.msg.userId;
-    //     this.response = {
-    //       code: 0,
-    //       msg: { token: await this.createToToken(user), userId },
-    //     };
-    //     return this.response;
-    //   })
-    //   .catch((err) => err);
+        const userId = res.msg.userId;
+        this.response = {
+          code: 0,
+          msg: { token: await this.createToToken(user), userId },
+        };
+        return this.response;
+      })
+      .catch((err) => err);
   }
 
   // 用户注册方法
