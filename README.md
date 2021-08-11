@@ -268,3 +268,77 @@ Nestjs In Bilibili Study
       
     ```
 
+### jwt 用户鉴权
+
+  * 依赖
+
+    ```
+      npm install --save @nestjs/jwt passport-jwt @nestjs/passport
+      npm install --save-dev @types/passport-jwt
+    ```
+
+  * 创建 auth
+
+    ```
+      nest g module auth
+      nest g service auth
+      nest g controller auth
+    ```
+
+  * jwt 设置
+
+    ```
+      // jwt.constans.ts
+      export const JWT_CONSTANT = {
+        secret: 'king_bilibili',
+      };
+      // jwt.strategy.ts jwt 策略
+      import { ExtractJwt, Strategy } from 'passport-jwt';
+      import { PassportStrategy } from '@nestjs/passport';
+      import { Injectable } from '@nestjs/common';
+      import { JWT_CONSTANT } from './jwt.constants';
+      import { User } from 'src/interface/user.interface';
+
+      @Injectable()
+      export class JwtStrategy extends PassportStrategy(Strategy) {
+        constructor() {
+          super({
+            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+            ignoreExpiration: false,
+            secretOrKey: JWT_CONSTANT.secret,
+          });
+        }
+
+        async validate(payload: User) {
+          return { userId: payload._id };
+        }
+      }
+
+      // jwt 生成 token
+      constructor(
+        @InjectModel('USER_MODEL') private readonly userModel: Model<User>,
+        private readonly userService: UserService,
+        private readonly jwtService: JwtService,
+      ) {}
+
+      // 创建 token
+      private async createToToken(user: User) {
+        return await this.jwtService.sign(user);
+      }
+
+      // main.ts
+      // swagger
+      const config = new DocumentBuilder().addBearerAuth(
+        {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+        'jwt',
+      )
+
+      // 页面定义jwt
+      @ApiBearerAuth('jwt')
+      @UseGuards(AuthGuard('jwt')) // 在控制器上定义表示这个模块内的方法需要 token, 在单个方法上定义只有该方法需要 jwt 鉴权
+
+    ```
