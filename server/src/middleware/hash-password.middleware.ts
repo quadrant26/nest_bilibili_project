@@ -9,7 +9,7 @@ export class HashPasswordMiddleware implements NestMiddleware {
     // 对用户密码进行加密
     if (userPassword) {
       const salt = addSalt();
-      userPassword = encript(userPassword, addSalt());
+      userPassword = encript(userPassword, salt);
       req.body['password'] = userPassword;
       req.body['salt'] = salt;
     }
