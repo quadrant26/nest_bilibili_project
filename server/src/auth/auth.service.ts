@@ -5,6 +5,7 @@ import { IResponse } from '../interface/response.interface';
 import { encript } from 'src/utils/Encription';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { JwtService } from '@nestjs/jwt';
 
 const logger = new Logger('user.service');
 
@@ -15,6 +16,7 @@ export class AuthService {
   constructor(
     @InjectModel('USER_MODEL') private readonly userModel: Model<User>,
     private readonly userService: UserService,
+    private readonly jwtService: JwtService,
   ) {}
 
   // 用户登录验证
@@ -57,7 +59,26 @@ export class AuthService {
   }
 
   public async login(user: User) {
-    return await this.validateUser(user);
+    // return await this.validateUser(user);
+    return await this.validateUser(user).then(() => {
+      return this.createToToken(user);
+    });
+
+    // return await this.validateUser(user)
+    //   .then(async (res: IResponse) => {
+    //     if (res.code === 0) {
+    //       this.response = res;
+    //       throw this.response;
+    //     }
+
+    //     const userId = res.msg.userId;
+    //     this.response = {
+    //       code: 0,
+    //       msg: { token: await this.createToToken(user), userId },
+    //     };
+    //     return this.response;
+    //   })
+    //   .catch((err) => err);
   }
 
   // 用户注册方法
@@ -100,5 +121,10 @@ export class AuthService {
       .finally(() => {
         // console.log(this.response);
       });
+  }
+
+  // 创建 token
+  private async createToToken(user: User) {
+    return await this.jwtService.sign(user);
   }
 }
