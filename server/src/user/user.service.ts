@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { ApiOperation } from '@nestjs/swagger';
 import { Model } from 'mongoose';
 import { User } from 'src/interface/user.interface';
 import { IResponse } from 'src/interface/response.interface';
@@ -49,6 +48,7 @@ export class UserService {
         logger.log(this.response.msg);
         console.log(`发生问题${JSON.stringify(err)}`);
         // throw this.response;
+        return err;
       })
       .finally(() => {
         // console.log(this.response);
