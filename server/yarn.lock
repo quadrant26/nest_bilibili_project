@@ -628,16 +628,6 @@
     webpack "5.45.1"
     webpack-node-externals "3.0.0"
 
-"@nestjs/common@^7.4.4":
-  version "7.6.18"
-  resolved "https://registry.nlark.com/@nestjs/common/download/@nestjs/common-7.6.18.tgz#d89e6d248985eec13af60507a8725cb2142d660a"
-  integrity sha1-2J5tJImF7sE69gUHqHJcshQtZgo=
-  dependencies:
-    axios "0.21.1"
-    iterare "1.2.1"
-    tslib "2.2.0"
-    uuid "8.3.2"
-
 "@nestjs/common@^8.0.0":
   version "8.0.6"
   resolved "https://registry.nlark.com/@nestjs/common/download/@nestjs/common-8.0.6.tgz#52157de0bde7a439b2248ffd6d5e221fd593bc93"
@@ -646,19 +636,6 @@
     axios "0.21.1"
     iterare "1.2.1"
     tslib "2.3.0"
-    uuid "8.3.2"
-
-"@nestjs/core@^7.4.4":
-  version "7.6.18"
-  resolved "https://registry.nlark.com/@nestjs/core/download/@nestjs/core-7.6.18.tgz?cache=0&sync_timestamp=1628150828322&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40nestjs%2Fcore%2Fdownload%2F%40nestjs%2Fcore-7.6.18.tgz#36448f0ae7f7d08f032e1e7e53b4a4c82ae844d7"
-  integrity sha1-NkSPCuf30I8DLh5+U7SkyCroRNc=
-  dependencies:
-    "@nuxtjs/opencollective" "0.3.2"
-    fast-safe-stringify "2.0.7"
-    iterare "1.2.1"
-    object-hash "2.1.1"
-    path-to-regexp "3.2.0"
-    tslib "2.2.0"
     uuid "8.3.2"
 
 "@nestjs/core@^8.0.0":
@@ -919,13 +896,6 @@
   dependencies:
     "@types/node" "*"
 
-"@types/ioredis@*":
-  version "4.26.7"
-  resolved "https://registry.nlark.com/@types/ioredis/download/@types/ioredis-4.26.7.tgz#8c8174b9db38f71f0e372174c66a031a2ca7d9cf"
-  integrity sha1-jIF0uds49x8ONyF0xmoDGiyn2c8=
-  dependencies:
-    "@types/node" "*"
-
 "@types/istanbul-lib-coverage@*", "@types/istanbul-lib-coverage@^2.0.0", "@types/istanbul-lib-coverage@^2.0.1":
   version "2.0.3"
   resolved "https://registry.nlark.com/@types/istanbul-lib-coverage/download/@types/istanbul-lib-coverage-2.0.3.tgz?cache=0&sync_timestamp=1621241456732&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fistanbul-lib-coverage%2Fdownload%2F%40types%2Fistanbul-lib-coverage-2.0.3.tgz#4ba8ddb720221f432e443bd5f9117fd22cfd4762"
@@ -1054,11 +1024,6 @@
   integrity sha1-LnD2nyILx3tPZg1ywuGkIx9Ep30=
   dependencies:
     "@types/superagent" "*"
-
-"@types/uuid@*":
-  version "8.3.1"
-  resolved "https://registry.nlark.com/@types/uuid/download/@types/uuid-8.3.1.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fuuid%2Fdownload%2F%40types%2Fuuid-8.3.1.tgz#1a32969cf8f0364b3d8c8af9cc3555b7805df14f"
-  integrity sha1-GjKWnPjwNks9jIr5zDVVt4Bd8U8=
 
 "@types/yargs-parser@*":
   version "20.2.1"
@@ -2508,11 +2473,6 @@ fast-levenshtein@^2.0.6, fast-levenshtein@~2.0.6:
   resolved "https://registry.npm.taobao.org/fast-levenshtein/download/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
 
-fast-safe-stringify@2.0.7:
-  version "2.0.7"
-  resolved "https://registry.nlark.com/fast-safe-stringify/download/fast-safe-stringify-2.0.7.tgz#124aa885899261f68aedb42a7c080de9da608743"
-  integrity sha1-EkqohYmSYfaK7bQqfAgN6dpgh0M=
-
 fast-safe-stringify@2.0.8, fast-safe-stringify@^2.0.7:
   version "2.0.8"
   resolved "https://registry.nlark.com/fast-safe-stringify/download/fast-safe-stringify-2.0.8.tgz#dc2af48c46cf712b683e849b2bbd446b32de936f"
@@ -2970,7 +2930,7 @@ interpret@^1.0.0:
   resolved "https://registry.npm.taobao.org/interpret/download/interpret-1.4.0.tgz#665ab8bc4da27a774a40584e812e3e0fa45b1a1e"
   integrity sha1-Zlq4vE2iendKQFhOgS4+D6RbGh4=
 
-ioredis@^4:
+ioredis@^4.27.7:
   version "4.27.7"
   resolved "https://registry.nlark.com/ioredis/download/ioredis-4.27.7.tgz#11bf2947e23a0e8055931afa7c2da89fc48c8ff3"
   integrity sha1-Eb8pR+I6DoBVkxr6fC2on8SMj/M=
@@ -4080,20 +4040,6 @@ neo-async@^2.6.2:
   resolved "https://registry.npm.taobao.org/neo-async/download/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha1-tKr7k+OustgXTKU88WOrfXMIMF8=
 
-nestjs-redis@^1.3.3:
-  version "1.3.3"
-  resolved "https://registry.npm.taobao.org/nestjs-redis/download/nestjs-redis-1.3.3.tgz#9b285653bbe3af92cf7ecd1e2225b8bf2df32ad2"
-  integrity sha1-myhWU7vjr5LPfs0eIiW4vy3zKtI=
-  dependencies:
-    "@nestjs/common" "^7.4.4"
-    "@nestjs/core" "^7.4.4"
-    "@types/ioredis" "*"
-    "@types/uuid" "*"
-    ioredis "^4"
-    reflect-metadata "*"
-    rxjs "^6"
-    uuid "^8"
-
 node-emoji@1.10.0:
   version "1.10.0"
   resolved "https://registry.nlark.com/node-emoji/download/node-emoji-1.10.0.tgz?cache=0&sync_timestamp=1628672589230&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fnode-emoji%2Fdownload%2Fnode-emoji-1.10.0.tgz#8886abd25d9c7bb61802a658523d1f8d2a89b2da"
@@ -4142,11 +4088,6 @@ object-assign@^4, object-assign@^4.1.0, object-assign@^4.1.1:
   version "4.1.1"
   resolved "https://registry.npm.taobao.org/object-assign/download/object-assign-4.1.1.tgz?cache=0&sync_timestamp=1602657128410&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fobject-assign%2Fdownload%2Fobject-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
   integrity sha1-IQmtx5ZYh8/AXLvUQsrIv7s2CGM=
-
-object-hash@2.1.1:
-  version "2.1.1"
-  resolved "https://registry.nlark.com/object-hash/download/object-hash-2.1.1.tgz#9447d0279b4fcf80cff3259bf66a1dc73afabe09"
-  integrity sha1-lEfQJ5tPz4DP8yWb9modxzr6vgk=
 
 object-hash@2.2.0:
   version "2.2.0"
@@ -4604,7 +4545,7 @@ redis-parser@^3.0.0:
   dependencies:
     redis-errors "^1.0.0"
 
-reflect-metadata@*, reflect-metadata@^0.1.13:
+reflect-metadata@^0.1.13:
   version "0.1.13"
   resolved "https://registry.npm.taobao.org/reflect-metadata/download/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
   integrity sha1-Z648pXyXKiqhZCsQ/jY/4y1J3Ag=
@@ -4696,7 +4637,7 @@ run-parallel@^1.1.9:
   dependencies:
     queue-microtask "^1.2.2"
 
-rxjs@6.6.7, rxjs@^6, rxjs@^6.6.0, rxjs@^6.6.6:
+rxjs@6.6.7, rxjs@^6.6.0, rxjs@^6.6.6:
   version "6.6.7"
   resolved "https://registry.nlark.com/rxjs/download/rxjs-6.6.7.tgz?cache=0&sync_timestamp=1627507026323&other_urls=https%3A%2F%2Fregistry.nlark.com%2Frxjs%2Fdownload%2Frxjs-6.6.7.tgz#90ac018acabf491bf65044235d5863c4dab804c9"
   integrity sha1-kKwBisq/SRv2UEQjXVhjxNq4BMk=
@@ -5296,11 +5237,6 @@ tsconfig-paths@3.10.1, tsconfig-paths@^3.10.1, tsconfig-paths@^3.9.0:
     minimist "^1.2.0"
     strip-bom "^3.0.0"
 
-tslib@2.2.0:
-  version "2.2.0"
-  resolved "https://registry.nlark.com/tslib/download/tslib-2.2.0.tgz#fb2c475977e35e241311ede2693cee1ec6698f5c"
-  integrity sha1-+yxHWXfjXiQTEe3iaTzuHsZpj1w=
-
 tslib@2.3.0:
   version "2.3.0"
   resolved "https://registry.nlark.com/tslib/download/tslib-2.3.0.tgz#803b8cdab3e12ba581a4ca41c8839bbb0dacb09e"
@@ -5409,7 +5345,7 @@ utils-merge@1.0.1:
   resolved "https://registry.nlark.com/utils-merge/download/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=
 
-uuid@8.3.2, uuid@^8:
+uuid@8.3.2:
   version "8.3.2"
   resolved "https://registry.nlark.com/uuid/download/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha1-gNW1ztJxu5r2xEXyGhoExgbO++I=
