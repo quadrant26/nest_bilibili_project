@@ -28,3 +28,18 @@ export async function _alter(user: ILogin) {
     data: user,
   });
 }
+
+export function _captcha(id?: string) {
+  return api({
+    method: "GET",
+    url: `/auth/captcha/${id ? id : "-1"}`,
+  });
+}
+
+export function _verify(captcha: { captcha: string; id: string }) {
+  return api({
+    method: "POST",
+    url: "/auth/verify",
+    data: captcha,
+  });
+}

@@ -25,6 +25,7 @@ api.interceptors.response.use(
         message: response.msg,
         type: "warning",
       });
+      return res.data.code;
     }
     return res.data.msg;
   },

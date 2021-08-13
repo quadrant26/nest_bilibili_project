@@ -31,7 +31,16 @@
             :type="item.meta.type ? item.meta.type : ''"
           ></el-input>
         </el-form-item>
-        <el-form-item prop="ready">
+        <el-form-item prop="captcha" label="验证码" class="form-item captcha">
+          <div class="captcha-inside">
+            <el-input
+              v-model="RegisterFormData.captcha"
+              maxlength="4"
+            ></el-input>
+            <p v-html="captcha.img" @click.stop="getNewCaptcha(captcha.id)"></p>
+          </div>
+        </el-form-item>
+        <el-form-item prop="ready" class="form-item ready">
           <el-checkbox-group v-model="RegisterFormData.ready">
             <el-checkbox name="ready">
               我已经阅读并同意
@@ -41,8 +50,8 @@
         </el-form-item>
       </el-form>
       <div class="login-button">
-        <el-button round type="warning" @click.stop="changeEvent('alter')">找回</el-button>
         <el-button round type="primary" @click.stop="regist('RegisterFormData')">注册</el-button>
+        <el-button round type="warning" @click.stop="resetForm('RegisterFormData')">清空</el-button>
       </div>
     </article>
     <!-- 登录表单底部 -->
@@ -68,7 +77,7 @@
 import weixin from "../../assets/images/login/weixin.png";
 import qq from "../../assets/images/login/qq.png";
 import weibo from "../../assets/images/login/weibo.png";
-import { _register } from '../../api/auth/index'
+import { _register, _captcha, _verify } from '../../api/auth/index'
 import { ElMessage } from 'element-plus';
 
 export default {
@@ -76,11 +85,16 @@ export default {
   data (){
     return {
       dialogVisible: false,
+      captcha: {
+        id: -1,
+        img: ""
+      },
       RegisterFormData: {
         phone: "",
         password: "",
         repassword: "",
-        ready: []
+        ready: [],
+        captcha: "",
       },
       RegisterForm: [
         {
@@ -106,7 +120,7 @@ export default {
           value: "",
           meta: {
             max: 30,
-            type: "repassword",
+            type: "password",
           },
         },
       ],
@@ -115,13 +129,22 @@ export default {
         password: [{ required: true, message: "请输入密码", trigger: "blur" }],
         repassword: [{ required: true, message: "请确认密码", trigger: "blur" }],
         ready: [{ required: true, type: 'array', message: "请同意用户协议", trigger: "change" }],
+        captcha: [{ required: true, message: "请输入验证码", trigger: "blur" }],
       },
       login_icons: [weixin, qq, weibo],
     };
   },
+  mounted() {
+    this.getNewCaptcha();
+  },
   methods: {
     showDiolog (){
       this.dialogVisible = true;
+    },
+    getNewCaptcha (id){
+      _captcha(id).then( res => {
+        this.captcha = res;
+      })
     },
     regist (formName){
       this.$refs[formName].validate( (valid) => {
@@ -133,22 +156,36 @@ export default {
       })
     },
     async sendRegister (){
-      if ( this.RegisterForm.password !== this.RegisterFormData.repassword) {
+      if ( this.RegisterFormData.password !== this.RegisterFormData.repassword) {
         ElMessage.warning({
           message: "两次密码不一致",
           type: "warning"
         });
         return;
       }
-      const result = await _register(this.RegisterFormData);
-      ElMessage.success({
-        message: result,
-        type: "success"
-      });
-      this.changeEvent('login');
+
+      const captcha = {
+        captcha: this.RegisterFormData.captcha,
+        id: this.captcha.id
+      }
+
+      _verify(captcha).then( async (res) => {
+        if ( typeof res === 'number' ) throw res;
+        const result = await _register(this.RegisterFormData);
+        ElMessage.success({
+          message: result,
+          type: "success"
+        });
+        this.changeEvent('login'); 
+      })
+      
     },
     changeEvent (newEvent){
       this.$store.commit('setEvent', newEvent)
+    },
+    async resetForm (formName){
+      this.$refs[formName].resetFields();
+      await this.getNewCaptcha();
     },
     login (){
       this.$store.commit('setEvent', 'login')
@@ -183,6 +220,17 @@ export default {
         width: 80%;
         padding: 5px;
         margin-bottom: 15px;
+      }
+      .captcha {
+        margin-bottom: 0;
+        .captcha-inside {
+          display: flex;
+          align-items: center;
+        }
+      }
+      .ready {
+        margin-bottom: 0px;
+        text-align: left;
       }
       .phone,
       .password {
