@@ -1,6 +1,8 @@
 <template>
   <div>
     123234
+
+    <el-button>1</el-button>
   </div>
 </template>
 
