@@ -6,12 +6,15 @@ import { encript } from 'src/utils/Encription';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
+import * as svgCaptcha from 'svg-captcha';
 
 const logger = new Logger('user.service');
 
 @Injectable()
 export class AuthService {
   private response: IResponse;
+  private pointer: any = 0;
+  private captchas: any = {};
 
   constructor(
     @InjectModel('USER_MODEL') private readonly userModel: Model<User>,
@@ -141,5 +144,38 @@ export class AuthService {
   // 创建 token
   private async createToToken(user: User) {
     return await this.jwtService.sign(user);
+  }
+
+  // 生成 svg 验证码
+  async createCaptcha(id?: string) {
+    if (id != '-1') {
+      delete this.captchas[id];
+    }
+    const c = svgCaptcha.create();
+    this.captchas[this.pointer] = c.text;
+    this.response = {
+      code: 0,
+      msg: {
+        id: this.pointer++,
+        img: c.data,
+      },
+    };
+
+    return this.response;
+  }
+
+  async verifacation(code: string, id: string) {
+    if (this.captchas[id].toUpperCase() === code.toUpperCase()) {
+      this.response = {
+        code: 0,
+        msg: '验证码通过',
+      };
+    } else {
+      this.response = {
+        code: 8,
+        msg: '验证码错误',
+      };
+    }
+    return this.response;
   }
 }
