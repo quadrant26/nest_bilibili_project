@@ -5,7 +5,7 @@ interface IResponse {
   msg: any;
 }
 
-const baseURL: string = "/api";
+const baseURL: string = "http://localhost:3000";
 
 const api = axios.create({
   baseURL,
@@ -23,7 +23,7 @@ api.interceptors.response.use(
     if (response.code !== 0) {
       console.warn(response.msg);
     }
-    return res;
+    return res.data.msg;
   },
   (err) => console.log(err)
 );
