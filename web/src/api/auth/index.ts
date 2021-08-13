@@ -12,3 +12,19 @@ export async function _login(user: ILogin) {
     data: user,
   });
 }
+
+export async function _register(user: ILogin) {
+  return api({
+    method: "POST",
+    url: "/auth/regist",
+    data: user,
+  });
+}
+
+export async function _alter(user: ILogin) {
+  return api({
+    method: "POST",
+    url: "/auth/alter",
+    data: user,
+  });
+}

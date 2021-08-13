@@ -6,9 +6,17 @@
       <div class="login-img-mask"></div>
     </div>
     <!-- 登录表 -->
-    <div class="login-card">
+    <div class="login-card" v-if="event === 'login'">
       <div class="login-bg"></div>
       <login-form class="login-form"></login-form>
+    </div>
+    <div class="login-card" v-else-if="event === 'regist'">
+      <div class="login-bg"></div>
+      <register-form class="login-form"></register-form>
+    </div>
+    <div class="login-card" v-else>
+      <div class="login-bg"></div>
+      <alter-form class="login-form"></alter-form>
     </div>
   </div>
 </template>
@@ -17,14 +25,33 @@
 import { _hello } from "../api/user/index";
 import LoginForm from "../components/login/LoginForm.vue";
 import login_background from "../assets/images/login/login_background.png";
+import RegisterForm from "../components/login/RigisterForm.vue";
+import AlterForm from "../components/login/AlterForm.vue";
+
 export default {
-  components: { LoginForm },
+  components: { 
+    LoginForm, 
+    RegisterForm, 
+    AlterForm 
+  },
   setup() {},
   data() {
     return {
       login_background,
+      event: "login"
     };
   },
+  computed: {
+    event() {
+      return this.$store.state.event;
+    }
+  },
+  watch: {
+    event(newEvent){
+      console.log(newEvent);
+      this.event = newEvent
+    }
+  }
 };
 </script>
 

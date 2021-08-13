@@ -2,12 +2,7 @@
   <div class="login-from">
     <!-- 登录表单头部 -->
     <header class="login-title">
-      <h2>登录</h2>
-      <h4>
-        你尚未拥有账户？点击
-        <span class="login-regist" @click.stop="changeEvent('regist')">注册</span>
-        进行登录
-      </h4>
+      <h2>找回密码</h2>
     </header>
     <!-- 登录表单内容 -->
     <article>
@@ -37,8 +32,8 @@
         <span>《相关协议》</span>
       </el-checkbox> -->
       <div class="login-button">
-        <el-button round type="warning" @click.stop="changeEvent('alter')">找回</el-button>
-        <el-button round type="primary" @click.stop="login">登录</el-button>
+        <el-button round type="warning" @click.stop="alter">开始找回</el-button>
+        <el-button round type="primary" @click.stop="changeEvent('login')">登录</el-button>
       </div>
     </article>
     <!-- 登录表单底部 -->
@@ -56,10 +51,10 @@
 import weixin from "../../assets/images/login/weixin.png";
 import qq from "../../assets/images/login/qq.png";
 import weibo from "../../assets/images/login/weibo.png";
-import { _login } from '../../api/auth/index'
+import { _alter } from '../../api/auth/index'
 
 export default {
-  name: 'LoginForm',
+  name: 'AlterForm',
   data (){
     return {
       LoginFormData: {
@@ -94,22 +89,19 @@ export default {
     };
   },
   methods: {
-    async login (){
-      const result = await _login(this.LoginFormData);
+    async alter (){
+      const result = await _alter(this.LoginFormData);
       console.log(result);
       if ( result.code ){
         localStorage.setItem('token', result.token);
         localStorage.setItem('userId', result.userId);
       }
     },
-    changeEvent (newEvent){
-      this.$store.commit('setEvent', newEvent)
+    changeEvent (newEvent) {
+      this.$store.commit('setEvent', newEvent);
     },
-    regist (){
-      this.$store.commit('setEvent', 'regist')
-    },
-    alter (){
-      this.$store.commit('setEvent', 'alter')
+    login (){
+      this.$store.commit('setEvent', 'login')
     }
   }
 }

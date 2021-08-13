@@ -1,53 +1,65 @@
 <template>
   <div class="login-from">
-    <!-- 登录表单头部 -->
+    <!-- 注册表单头部 -->
     <header class="login-title">
-      <h2>登录</h2>
+      <h2>注册</h2>
       <h4>
-        你尚未拥有账户？点击
-        <span class="login-regist" @click.stop="changeEvent('regist')">注册</span>
+        你已有账户？点击
+        <span class="login-regist" @click.stop="changeEvent('login')">登录</span>
         进行登录
       </h4>
     </header>
-    <!-- 登录表单内容 -->
+    <!-- 注册表单内容 -->
     <article>
       <el-form
-        :model="LoginFormData"
+        :model="RegisterFormData"
         :rules="rules"
         class="login-form-body"
-        ref="LoginFormData"
+        ref="RegisterFormData"
         label-width="100px"
       >
         <el-form-item
-          v-for="item in LoginForm"
+          v-for="item in RegisterForm"
           :key="item.title"
           :label="item.title"
           :prop="item.name"
-          :class="item.name"
+          :class="[item.name, 'form-item']"
         >
           <el-input
-            v-model="LoginFormData[item.name]"
+            v-model="RegisterFormData[item.name]"
             :maxlength="item.meta.max"
             :type="item.meta.type ? item.meta.type : ''"
           ></el-input>
         </el-form-item>
+        <el-form-item prop="ready">
+          <el-checkbox-group v-model="RegisterFormData.ready">
+            <el-checkbox name="ready">
+              我已经阅读并同意
+              <span @click.stop="showDiolog">《相关协议》</span>
+            </el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
       </el-form>
-      <!-- <el-checkbox v-model="ready" class="login-ready"
-        >我已经阅读并同意
-        <span>《相关协议》</span>
-      </el-checkbox> -->
       <div class="login-button">
         <el-button round type="warning" @click.stop="changeEvent('alter')">找回</el-button>
-        <el-button round type="primary" @click.stop="login">登录</el-button>
+        <el-button round type="primary" @click.stop="regist('RegisterFormData')">注册</el-button>
       </div>
     </article>
     <!-- 登录表单底部 -->
-    <footer>
+    <!-- <footer>
       <h3>其他社交方式登录</h3>
       <div class="login-other">
         <img class="login-icon" v-for="img in login_icons" :key="img" :src="img" />
       </div>
-    </footer>
+    </footer> -->
+
+    <el-dialog
+      title="用户协议"
+      v-model="dialogVisible"
+      width="30%"
+      :before-close="handleClose">
+      <span>这是一段信息</span>
+    </el-dialog>
   </div>
 </template>
 
@@ -56,17 +68,21 @@
 import weixin from "../../assets/images/login/weixin.png";
 import qq from "../../assets/images/login/qq.png";
 import weibo from "../../assets/images/login/weibo.png";
-import { _login } from '../../api/auth/index'
+import { _register } from '../../api/auth/index'
+import { ElMessage } from 'element-plus';
 
 export default {
-  name: 'LoginForm',
+  name: 'RegisterForm',
   data (){
     return {
-      LoginFormData: {
+      dialogVisible: false,
+      RegisterFormData: {
         phone: "",
         password: "",
+        repassword: "",
+        ready: []
       },
-      LoginForm: [
+      RegisterForm: [
         {
           title: "手机号",
           name: "phone",
@@ -84,32 +100,58 @@ export default {
             type: "password",
           },
         },
+        {
+          title: "确认密码",
+          name: "repassword",
+          value: "",
+          meta: {
+            max: 30,
+            type: "repassword",
+          },
+        },
       ],
       rules: {
         phone: [{ required: true, message: "请输入手机号码", trigger: "blur" }],
         password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+        repassword: [{ required: true, message: "请确认密码", trigger: "blur" }],
+        ready: [{ required: true, type: 'array', message: "请同意用户协议", trigger: "change" }],
       },
-      ready: false,
       login_icons: [weixin, qq, weibo],
     };
   },
   methods: {
-    async login (){
-      const result = await _login(this.LoginFormData);
-      console.log(result);
-      if ( result.code ){
-        localStorage.setItem('token', result.token);
-        localStorage.setItem('userId', result.userId);
+    showDiolog (){
+      this.dialogVisible = true;
+    },
+    regist (formName){
+      this.$refs[formName].validate( (valid) => {
+        if ( valid ){
+          this.sendRegister();
+        } else {
+          return false;
+        }
+      })
+    },
+    async sendRegister (){
+      if ( this.RegisterForm.password !== this.RegisterFormData.repassword) {
+        ElMessage.warning({
+          message: "两次密码不一致",
+          type: "warning"
+        });
+        return;
       }
+      const result = await _register(this.RegisterFormData);
+      ElMessage.success({
+        message: result,
+        type: "success"
+      });
+      this.changeEvent('login');
     },
     changeEvent (newEvent){
       this.$store.commit('setEvent', newEvent)
     },
-    regist (){
-      this.$store.commit('setEvent', 'regist')
-    },
-    alter (){
-      this.$store.commit('setEvent', 'alter')
+    login (){
+      this.$store.commit('setEvent', 'login')
     }
   }
 }
@@ -137,10 +179,15 @@ export default {
   }
   article {
     .login-form-body {
+      .form-item{
+        width: 80%;
+        padding: 5px;
+        margin-bottom: 15px;
+      }
       .phone,
       .password {
         width: 80%;
-        padding: 15px;
+        padding: 5px;
       }
       .password {
         padding-top: 5px;
