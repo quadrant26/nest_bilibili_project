@@ -18,4 +18,11 @@ export class UserService {
       phone,
     });
   }
+
+  async hello() {
+    return {
+      code: 0,
+      msg: 'hello world',
+    };
+  }
 }

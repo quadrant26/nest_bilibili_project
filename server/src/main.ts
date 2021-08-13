@@ -7,6 +7,9 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // 设置可跨域
+  app.enableCors();
+
   const config = new DocumentBuilder()
     .setTitle('Nestjs BiliBili')
     .setDescription('The Nestjs API description')

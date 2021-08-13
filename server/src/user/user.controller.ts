@@ -13,8 +13,8 @@ import { Role } from 'src/role/role.decorator';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user')
-@UseGuards(AuthGuard('jwt'))
-@ApiBearerAuth('jwt')
+// @UseGuards(AuthGuard('jwt'))
+// @ApiBearerAuth('jwt')
 @ApiTags('用户模块')
 export class UserController {
   constructor(private userService: UserService) {}
@@ -22,7 +22,7 @@ export class UserController {
   @Get('hello')
   // @SetMetadata('roles', ['admin']) // 设置元数据， 设置接口的权限
   @Role('admin') // 自定义装饰器
-  hello() {
-    return 'hello world';
+  async hello() {
+    return await this.userService.hello();
   }
 }
