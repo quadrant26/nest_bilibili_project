@@ -38,7 +38,7 @@
       </el-checkbox> -->
       <div class="login-button">
         <el-button round type="warning">找回</el-button>
-        <el-button round type="primary">登录</el-button>
+        <el-button round type="primary" @click.stop="login">登录</el-button>
       </div>
     </article>
     <!-- 登录表单底部 -->
@@ -56,6 +56,7 @@
 import weixin from "../../assets/images/login/weixin.png";
 import qq from "../../assets/images/login/qq.png";
 import weibo from "../../assets/images/login/weibo.png";
+import { _login } from '../../api/auth/index'
 
 export default {
   name: 'LoginForm',
@@ -92,6 +93,16 @@ export default {
       login_icons: [weixin, qq, weibo],
     };
   },
+  methods: {
+    async login (){
+      const result = await _login(this.LoginFormData);
+      console.log(result);
+      if ( result.code ){
+        localStorage.setItem('token', result.token);
+        localStorage.setItem('userId', result.userId);
+      }
+    }
+  }
 }
 </script>
 
