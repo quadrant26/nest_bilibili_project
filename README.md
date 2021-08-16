@@ -338,6 +338,7 @@ Nestjs In Bilibili Study
       )
 
       // 页面定义jwt
+      // AuthGuard 需要从 @nestjs/passport 从导入
       @ApiBearerAuth('jwt')
       @UseGuards(AuthGuard('jwt')) // 在控制器上定义表示这个模块内的方法需要 token, 在单个方法上定义只有该方法需要 jwt 鉴权
 

@@ -1,10 +1,13 @@
-import { Body, Controller, Param, Post } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { Project } from 'src/interface/project.interface';
 import { ProjectService } from './project.service';
 
 @Controller('project')
 @ApiTags('项目')
+@UseGuards(AuthGuard('jwt'))
+@ApiBearerAuth('jwt')
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
