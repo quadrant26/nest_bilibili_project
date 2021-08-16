@@ -18,6 +18,10 @@
       <div class="login-bg"></div>
       <alter-form class="login-form"></alter-form>
     </div>
+    <div class="login-card" v-else-if="event === 'message'">
+      <div class="login-bg"></div>
+      <message-form class="login-form"></message-form>
+    </div>
   </div>
 </template>
 
@@ -27,12 +31,14 @@ import LoginForm from "../components/login/LoginForm.vue";
 import login_background from "../assets/images/login/login_background.png";
 import RegisterForm from "../components/login/RigisterForm.vue";
 import AlterForm from "../components/login/AlterForm.vue";
+import MessageForm from "../components/login/MessageForm.vue";
 
 export default {
   components: { 
     LoginForm, 
     RegisterForm, 
-    AlterForm 
+    AlterForm,
+    MessageForm
   },
   setup() {},
   data() {

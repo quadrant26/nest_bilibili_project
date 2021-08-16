@@ -170,15 +170,26 @@ export default {
       }
 
       _verify(captcha).then( async (res) => {
-        if ( typeof res === 'number' ) throw res;
-        const result = await _register(this.RegisterFormData);
+        if ( typeof res === 'number' ) {
+          this.resetForm('RegisterFormData');
+          throw res;
+        };
+        sessionStorage.setItem(
+          'register',
+          JSON.stringify({
+            phone: this.RegisterFormData.phone,
+            password: this.RegisterFormData.password
+          })
+        )
+        return res; // await _register(this.RegisterFormData);
+      }).then( res => {
+        if ( typeof res === 'number' ) throw "";
         ElMessage.success({
-          message: result,
+          message: res,
           type: "success"
         });
-        this.changeEvent('login'); 
+        this.changeEvent('message'); 
       })
-      
     },
     changeEvent (newEvent){
       this.$store.commit('setEvent', newEvent)

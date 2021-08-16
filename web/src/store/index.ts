@@ -6,7 +6,7 @@ const store = createStore({
   state() {
     return {
       count: 0,
-      event: "login",
+      event: "regist",
     };
   },
   mutations: {
