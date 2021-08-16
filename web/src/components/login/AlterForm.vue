@@ -7,24 +7,33 @@
     <!-- 登录表单内容 -->
     <article>
       <el-form
-        :model="LoginFormData"
+        :model="AlterFormData"
         :rules="rules"
         class="login-form-body"
-        ref="LoginFormData"
+        ref="AlterFormData"
         label-width="100px"
       >
         <el-form-item
-          v-for="item in LoginForm"
+          v-for="item in AlterForm"
           :key="item.title"
           :label="item.title"
           :prop="item.name"
-          :class="item.name"
+          :class="[item.name, 'form-item']"
         >
           <el-input
-            v-model="LoginFormData[item.name]"
+            v-model="AlterFormData[item.name]"
             :maxlength="item.meta.max"
             :type="item.meta.type ? item.meta.type : ''"
           ></el-input>
+        </el-form-item>
+        <el-form-item prop="captcha" label="验证码" class="form-item captcha">
+          <div class="captcha-inside">
+            <el-input
+              v-model="AlterFormData.captcha"
+              maxlength="4"
+            ></el-input>
+            <p v-html="captcha.img" @click.stop="getNewCaptcha(captcha.id)"></p>
+          </div>
         </el-form-item>
       </el-form>
       <!-- <el-checkbox v-model="ready" class="login-ready"
@@ -32,17 +41,17 @@
         <span>《相关协议》</span>
       </el-checkbox> -->
       <div class="login-button">
-        <el-button round type="warning" @click.stop="alter">开始找回</el-button>
+        <el-button round type="warning" @click.stop="alter('AlterFormData')">开始找回</el-button>
         <el-button round type="primary" @click.stop="changeEvent('login')">登录</el-button>
       </div>
     </article>
     <!-- 登录表单底部 -->
-    <footer>
+    <!-- <footer>
       <h3>其他社交方式登录</h3>
       <div class="login-other">
         <img class="login-icon" v-for="img in login_icons" :key="img" :src="img" />
       </div>
-    </footer>
+    </footer> -->
   </div>
 </template>
 
@@ -51,17 +60,23 @@
 import weixin from "../../assets/images/login/weixin.png";
 import qq from "../../assets/images/login/qq.png";
 import weibo from "../../assets/images/login/weibo.png";
-import { _alter } from '../../api/auth/index'
+import { _alter, _captcha, _verify } from '../../api/auth/index';
+import { ElMessage } from 'element-plus';
 
 export default {
   name: 'AlterForm',
   data (){
     return {
-      LoginFormData: {
+      captcha: {
+        id: -1,
+        img: ""
+      },
+      AlterFormData: {
         phone: "",
+        captcha: "",
         password: "",
       },
-      LoginForm: [
+      AlterForm: [
         {
           title: "手机号",
           name: "phone",
@@ -71,7 +86,7 @@ export default {
           },
         },
         {
-          title: "登录密码",
+          title: "新密码",
           name: "password",
           value: "",
           meta: {
@@ -83,26 +98,55 @@ export default {
       rules: {
         phone: [{ required: true, message: "请输入手机号码", trigger: "blur" }],
         password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+        captcha: [{ required: true, message: "请输入验证码", trigger: "blur" }],
       },
       ready: false,
       login_icons: [weixin, qq, weibo],
     };
   },
+  mounted() {
+    this.getNewCaptcha();
+  },
   methods: {
-    async alter (){
-      const result = await _alter(this.LoginFormData);
-      console.log(result);
-      if ( result.code ){
-        localStorage.setItem('token', result.token);
-        localStorage.setItem('userId', result.userId);
+    alter (formName){
+      this.$refs[formName].validate( valid => {
+        if ( valid ){
+          this.sendAlter();
+        } else {
+          return false;
+        }
+      })
+      
+    },
+    async sendAlter (){
+
+      const captcha = {
+        captcha: this.AlterFormData.captcha,
+        id: this.captcha.id
       }
+
+      // 提交密码前,校验验证码是否正确
+      _verify(captcha).then( async (res) => {
+        if ( typeof res === 'number' ) throw res;
+        const result = await _alter(this.AlterFormData);
+        ElMessage.success({
+          message: result,
+          type: "success"
+        });
+        this.changeEvent('login');
+      })
     },
     changeEvent (newEvent) {
       this.$store.commit('setEvent', newEvent);
     },
     login (){
       this.$store.commit('setEvent', 'login')
-    }
+    },
+    getNewCaptcha (id){
+      _captcha(id).then( res => {
+        this.captcha = res;
+      })
+    },
   }
 }
 </script>
@@ -129,6 +173,18 @@ export default {
   }
   article {
     .login-form-body {
+      .form-item{
+        width: 80%;
+        padding: 5px;
+        margin-bottom: 15px;
+      }
+      .captcha {
+        margin-bottom: 0;
+        .captcha-inside {
+          display: flex;
+          align-items: center;
+        }
+      }
       .phone,
       .password {
         width: 80%;

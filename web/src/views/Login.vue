@@ -14,7 +14,7 @@
       <div class="login-bg"></div>
       <register-form class="login-form"></register-form>
     </div>
-    <div class="login-card" v-else>
+    <div class="login-card" v-else-if="event === 'alter'">
       <div class="login-bg"></div>
       <alter-form class="login-form"></alter-form>
     </div>

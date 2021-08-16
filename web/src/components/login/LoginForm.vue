@@ -23,7 +23,7 @@
           :key="item.title"
           :label="item.title"
           :prop="item.name"
-          :class="item.name"
+          :class="[item.name, 'form-item']"
         >
           <el-input
             v-model="LoginFormData[item.name]"
@@ -37,8 +37,8 @@
         <span>《相关协议》</span>
       </el-checkbox> -->
       <div class="login-button">
+        <el-button round type="primary" @click.stop="login('LoginFormData')">登录</el-button>
         <el-button round type="warning" @click.stop="changeEvent('alter')">找回</el-button>
-        <el-button round type="primary" @click.stop="login">登录</el-button>
       </div>
     </article>
     <!-- 登录表单底部 -->
@@ -94,7 +94,17 @@ export default {
     };
   },
   methods: {
-    async login (){
+    login (formName){
+      this.$refs[formName].validate( valid => {
+        if ( valid ) {
+          this.sendLoginForm();
+        } else {
+          return false;
+        }
+      })
+      
+    },
+    async sendLoginForm (){
       const result = await _login(this.LoginFormData);
       console.log(result);
       if ( result.code ){
