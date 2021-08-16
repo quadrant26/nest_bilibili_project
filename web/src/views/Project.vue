@@ -1,8 +1,10 @@
 <template>
   <div>
     <ProjectHeader></ProjectHeader>
-    <ProjectMain></ProjectMain>
-    <ProjectSide></ProjectSide>
+    <div class="project-area">
+      <ProjectSide></ProjectSide>
+      <ProjectMain></ProjectMain>
+    </div>
   </div>
 </template>
 
@@ -27,5 +29,8 @@
 </script>
 
 <style lang="scss" scoped>
-
+.project-area{
+  height: 95%;
+  background-color: #fff;
+}
 </style>
