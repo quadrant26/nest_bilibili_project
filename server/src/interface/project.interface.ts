@@ -11,4 +11,8 @@ export class Project extends Document {
   @Prop()
   @ApiProperty({ description: '项目简介', example: '实验小学简介' })
   readonly description: string;
+
+  @Prop()
+  @ApiProperty({ description: '创建者ID', example: '123' })
+  readonly createId: string;
 }
